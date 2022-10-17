@@ -16,6 +16,14 @@ router.get('/', (request, response) => {
   response.json(products);
 })
 
+router.post('/', (request, response) => {
+  const body = request.body
+  response.json({
+    message: 'created',
+    data: body,
+  })
+})
+
 // ESPECIFICO
 router.get('/filter', (request, response) => {
   response.send('Yo soy un filter')
