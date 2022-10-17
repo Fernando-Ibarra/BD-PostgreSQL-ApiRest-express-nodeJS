@@ -32,7 +32,15 @@ router.patch('/:id', (request, response) => {
     data: body,
     id,
   })
-})
+});
+
+router.delete('/:id', (request, response) => {
+  const { id } = request.params;
+  response.json({
+    message: 'delete',
+    id,
+  })
+});
 
 // ESPECIFICO
 router.get('/filter', (request, response) => {
