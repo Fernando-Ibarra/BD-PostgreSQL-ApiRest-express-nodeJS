@@ -18,7 +18,7 @@ router.get('/', (request, response) => {
 
 router.post('/', (request, response) => {
   const body = request.body
-  response.json({
+  response.status(201).json({
     message: 'created',
     data: body,
   })
@@ -50,11 +50,18 @@ router.get('/filter', (request, response) => {
 // DINAMICO
 router.get('/:id', (request, response) => {
   const { id } = request.params;
-  response.json({
-    id,
-    name:'Product 1',
-    price: 1000
-  })
+  if (id === '999') {
+    response.status(404).json({
+      message: "Not Found"
+    })
+  } else {
+    response.status(200).json({
+      id,
+      name:'Product 1',
+      price: 1000
+    })
+  }
+
 })
 
 module.exports = router;
