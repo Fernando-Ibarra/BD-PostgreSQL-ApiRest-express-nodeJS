@@ -24,6 +24,16 @@ router.post('/', (request, response) => {
   })
 })
 
+router.patch('/:id', (request, response) => {
+  const { id } = request.params
+  const body = request.body
+  response.json({
+    message: 'update',
+    data: body,
+    id,
+  })
+})
+
 // ESPECIFICO
 router.get('/filter', (request, response) => {
   response.send('Yo soy un filter')
