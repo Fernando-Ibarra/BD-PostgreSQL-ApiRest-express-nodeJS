@@ -4,27 +4,34 @@ const router = express.Router();
 // Instancia
 const service = new ProductsServices();
 
-router.get('/', (request, response) => {
-  const  products = service.find();
+router.get('/', async (request, response) => {
+  const  products = await service.find();
   response.json(products);
 })
 
-router.post('/', (request, response) => {
+router.post('/', async (request, response) => {
   const body = request.body
-  const newProduct = service.create(body);
+  const newProduct = await service.create(body);
   response.status(201).json(newProduct)
 })
 
-router.patch('/:id', (request, response) => {
-  const { id } = request.params
-  const body = request.body
-  const product = service.update(id, body)
-  response.json(product)
+router.patch('/:id', async (request, response) => {
+  try {
+    const { id } = request.params
+    const body = request.body
+    const product = await service.update(id, body)
+    response.json(product)
+  } catch (error) {
+    response.status(404).json({
+      message: error.message,
+    });
+  }
+
 });
 
-router.delete('/:id', (request, response) => {
+router.delete('/:id', async (request, response) => {
   const { id } = request.params;
-  const product = service.delete(id)
+  const product = await service.delete(id)
   response.json(product)
 });
 
@@ -34,9 +41,9 @@ router.delete('/:id', (request, response) => {
 });*/
 
 // DINAMICO
-router.get('/:id', (request, response) => {
+router.get('/:id', async (request, response) => {
   const { id } = request.params;
-  const products = service.findOne(id);
+  const products = await service.findOne(id);
   response.json(products);
 })
 
