@@ -1,67 +1,43 @@
 const express = require('express');
-const faker = require('faker');
+const ProductsServices = require('../services/productService')
 const router = express.Router();
+// Instancia
+const service = new ProductsServices();
 
 router.get('/', (request, response) => {
-  const  products = [];
-  const { size } = request.query;
-  const limit = size || 10;
-  for (let index = 0; index < limit; index++) {
-    products.push({
-      name: faker.commerce.productName(),
-      price: parseInt(faker.commerce.price(), 10),
-      image: faker.image.imageUrl(),
-    })
-  }
+  const  products = service.find();
   response.json(products);
 })
 
 router.post('/', (request, response) => {
   const body = request.body
-  response.status(201).json({
-    message: 'created',
-    data: body,
-  })
+  const newProduct = service.create(body);
+  response.status(201).json(newProduct)
 })
 
 router.patch('/:id', (request, response) => {
   const { id } = request.params
   const body = request.body
-  response.json({
-    message: 'update',
-    data: body,
-    id,
-  })
+  const product = service.update(id, body)
+  response.json(product)
 });
 
 router.delete('/:id', (request, response) => {
   const { id } = request.params;
-  response.json({
-    message: 'delete',
-    id,
-  })
+  const product = service.delete(id)
+  response.json(product)
 });
 
 // ESPECIFICO
-router.get('/filter', (request, response) => {
+/*router.get('/filter', (request, response) => {
   response.send('Yo soy un filter')
-});
+});*/
 
 // DINAMICO
 router.get('/:id', (request, response) => {
   const { id } = request.params;
-  if (id === '999') {
-    response.status(404).json({
-      message: "Not Found"
-    })
-  } else {
-    response.status(200).json({
-      id,
-      name:'Product 1',
-      price: 1000
-    })
-  }
-
+  const products = service.findOne(id);
+  response.json(products);
 })
 
 module.exports = router;
