@@ -41,10 +41,15 @@ router.delete('/:id', async (request, response) => {
 });*/
 
 // DINAMICO
-router.get('/:id', async (request, response) => {
-  const { id } = request.params;
-  const products = await service.findOne(id);
-  response.json(products);
+router.get('/:id', async (request, response, next) => {
+  try {
+    const { id } = request.params;
+    const products = await service.findOne(id);
+    response.json(products);
+  } catch (error) {
+    next(error)
+  }
+
 })
 
 module.exports = router;
