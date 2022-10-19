@@ -1,6 +1,10 @@
 const express = require('express');
 const ProductsServices = require('../services/productService')
+const validatorHandler = require('../middlewares/validatorHandler')
+const { createProductSchema, updateProductSchema, getProductSchema } = require('../schemas/productSchema')
+
 const router = express.Router();
+
 // Instancia
 const service = new ProductsServices();
 
@@ -9,13 +13,13 @@ router.get('/', async (request, response) => {
   response.json(products);
 })
 
-router.post('/', async (request, response) => {
+router.post('/', validatorHandler(createProductSchema, 'body'), async (request, response) => {
   const body = request.body
   const newProduct = await service.create(body);
   response.status(201).json(newProduct)
 })
 
-router.patch('/:id', async (request, response, next) => {
+router.patch('/:id', validatorHandler(getProductSchema, 'params'), validatorHandler(updateProductSchema, 'body'), async (request, response, next) => {
   try {
     const { id } = request.params
     const body = request.body
@@ -24,7 +28,6 @@ router.patch('/:id', async (request, response, next) => {
   } catch (error) {
     next(error);
   }
-
 });
 
 router.delete('/:id', async (request, response) => {
@@ -39,7 +42,7 @@ router.delete('/:id', async (request, response) => {
 });*/
 
 // DINAMICO
-router.get('/:id', async (request, response, next) => {
+router.get('/:id', validatorHandler(getProductSchema, 'params'), async (request, response, next) => {
   try {
     const { id } = request.params;
     const products = await service.findOne(id);
@@ -47,7 +50,6 @@ router.get('/:id', async (request, response, next) => {
   } catch (error) {
     next(error)
   }
-
 })
 
 module.exports = router;
