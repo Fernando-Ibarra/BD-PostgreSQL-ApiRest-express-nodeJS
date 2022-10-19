@@ -1,5 +1,6 @@
 const express = require('express');
-const routerApi = require('./routes')
+const cors = require('cors');
+const routerApi = require('./routes');
 
 const { logError, errorHandler, boomErrorHandler } = require('./middlewares/errorHandler')
 
@@ -7,7 +8,21 @@ const { logError, errorHandler, boomErrorHandler } = require('./middlewares/erro
 const app = express();
 const port = 3000;
 
-app.use(express.json())
+
+
+const whitelist = ['h ttp://127.0.0.1:5500'];
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (whitelist.indexOf(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Acceso no permitido'));
+    }
+  }
+}
+app.use(cors(corsOptions));
+
+app.use(express.json());
 
 // GET
 app.get('/', (request, response) => {
