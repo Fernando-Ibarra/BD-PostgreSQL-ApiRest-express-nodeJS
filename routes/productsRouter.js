@@ -15,16 +15,14 @@ router.post('/', async (request, response) => {
   response.status(201).json(newProduct)
 })
 
-router.patch('/:id', async (request, response) => {
+router.patch('/:id', async (request, response, next) => {
   try {
     const { id } = request.params
     const body = request.body
     const product = await service.update(id, body)
     response.json(product)
   } catch (error) {
-    response.status(404).json({
-      message: error.message,
-    });
+    next(error);
   }
 
 });

@@ -1,6 +1,8 @@
 const express = require('express');
 const routerApi = require('./routes')
-const { logError, errorHandler } = require('./middlewares/errorHandler')
+
+const { logError, errorHandler, boomErrorHandler } = require('./middlewares/errorHandler')
+
 // constructor - metodo que crea la aplicación
 const app = express();
 const port = 3000;
@@ -15,6 +17,7 @@ app.get('/', (request, response) => {
 routerApi(app);
 
 app.use(logError);
+app.use(boomErrorHandler);
 app.use(errorHandler);
 
 app.listen(port, () => {
