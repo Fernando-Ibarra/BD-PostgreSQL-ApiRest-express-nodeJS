@@ -6,14 +6,14 @@ const { logError, errorHandler, boomErrorHandler } = require('./middlewares/erro
 
 // constructor - metodo que crea la aplicación
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
-
+app.use(express.json());
 
 const whitelist = ['h ttp://127.0.0.1:5500'];
 const corsOptions = {
   origin: (origin, callback) => {
-    if (whitelist.indexOf(origin)) {
+    if (whitelist.indexOf(origin) || !origin) {
       callback(null, true);
     } else {
       callback(new Error('Acceso no permitido'));
@@ -21,8 +21,6 @@ const corsOptions = {
   }
 }
 app.use(cors(corsOptions));
-
-app.use(express.json());
 
 // GET
 app.get('/', (request, response) => {
