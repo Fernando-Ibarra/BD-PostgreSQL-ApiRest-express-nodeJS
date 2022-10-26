@@ -7,7 +7,7 @@ class ProductsServices {
     this.products = [];
     this.generate();
     this.pool = pool;
-    this.pool.on('error', (error) =>console.error(error))
+    this.pool.on('error', (error) => console.error(error))
   }
 
   generate() {
